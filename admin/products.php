@@ -89,7 +89,8 @@ $startFrom = ($page - 1) * $productsPerPage; // Mulai dari produk ke-...
     <section id="products" class="container my-5">
         <h2 class="text-center mb-4">Our Products</h2>
 
-        <a href="add_product_form.php?id=' . $productId . '" class="btn btn-primary btn-sm">Add</a>
+        <a href="add_product_form.php?id=' . $productId . '" class="btn btn-primary btn-sm mb-3">Add</a>
+
 
         <!-- Tabel Produk -->
         <table class="table table-bordered table-striped">

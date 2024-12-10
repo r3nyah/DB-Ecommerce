@@ -63,7 +63,7 @@ if(session_id() == '' || !isset($_SESSION)){ session_start(); }
     <section class="hero">
         <h2>Welcome to Lintas Buana</h2>
         <p>Shop the best MikroTik routers and accessories!</p>
-        <a href="#products" class="btn btn-primary btn-lg">Browse Products</a>
+        <a href="products.php" class="btn btn-primary btn-lg">Browse Products</a>
     </section>
 
     <!-- Products Section -->

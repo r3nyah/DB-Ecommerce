@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         VALUES ('$customer_id', '$username', '$hashed_password')";
         if (mysqli_query($conn, $query_login)) {
             // Jika berhasil, redirect ke halaman login
-            header("Location: index.php");
+            header("Location: loginform.php");
             exit();
         } else {
             echo "Error: " . $query_login . "<br>" . mysqli_error($conn);
