@@ -125,8 +125,8 @@ if (isset($_POST['submit'])) {
                 <label for="status" class="form-label">Status</label>
                 <select class="form-select" id="status" name="status">
                     <option value="cancelled" <?php echo ($currentStatus == 'cancelled') ? 'selected' : ''; ?>>Cancelled</option>
-                    <option value="process" <?php echo ($currentStatus == 'process') ? 'selected' : ''; ?>>Process</option>
-                    <option value="complete" <?php echo ($currentStatus == 'complete') ? 'selected' : ''; ?>>Complete</option>
+                    <option value="pending" <?php echo ($currentStatus == 'process') ? 'selected' : ''; ?>>Process</option>
+                    <option value="completed" <?php echo ($currentStatus == 'complete') ? 'selected' : ''; ?>>Complete</option>
                 </select>
             </div>
 

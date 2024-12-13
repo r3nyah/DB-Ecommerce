@@ -10,79 +10,132 @@ if (!isset($_SESSION['customer_id'])) {
 
 $customer_id = $_SESSION['customer_id'];
 
-// Jika form checkout dikirim
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // Pastikan ada item yang dipilih
-    if (isset($_POST['selected_items']) && is_array($_POST['selected_items'])) {
-        $selected_items = $_POST['selected_items'];
+// Ambil total harga dari keranjang
+$queryTotalPrice = "SELECT SUM(ci.total_price) AS total_price
+                    FROM cart_items ci
+                    JOIN cart c ON ci.cart_id = c.cart_id
+                    WHERE c.customer_id = '$customer_id'";
+$resultTotalPrice = mysqli_query($conn, $queryTotalPrice);
+$rowTotalPrice = mysqli_fetch_assoc($resultTotalPrice);
+$totalPrice = $rowTotalPrice['total_price'] ?? 0;
 
-        // Mulai transaksi database
-        mysqli_begin_transaction($conn);
+// Handle konfirmasi pembayaran
+if (isset($_POST['confirm_payment'])) {
+    $payment_proof = $_FILES['payment_proof']['name'];
+    $payment_proof_tmp = $_FILES['payment_proof']['tmp_name'];
 
-        try {
-            // Insert ke tabel transaction
-            $transaction_date = date("Y-m-d H:i:s");
-            $queryTransaction = "INSERT INTO transaction (transaction_date, customer_id) VALUES ('$transaction_date', '$customer_id')";
-            mysqli_query($conn, $queryTransaction);
+    // Pastikan file bukti pembayaran di-upload dengan benar
+    if (!empty($payment_proof)) {
+        $target_dir = "uploads/";
+        $target_file = $target_dir . basename($payment_proof);
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-            // Ambil ID transaksi terakhir
-            $transaction_id = mysqli_insert_id($conn);
+        // Validasi jenis file gambar
+        $allowed_types = ['jpg', 'jpeg', 'png', 'gif'];
+        if (in_array($imageFileType, $allowed_types)) {
+            if (move_uploaded_file($payment_proof_tmp, $target_file)) {
+                // Insert transaksi ke tabel transaction
+                $queryInsertTransaction = "INSERT INTO transaction (transaction_date, customer_id)
+                                           VALUES (CURRENT_TIMESTAMP, '$customer_id')";
+                if (mysqli_query($conn, $queryInsertTransaction)) {
+                    $transaction_id = mysqli_insert_id($conn);
 
-            // Proses setiap item yang dipilih
-            foreach ($selected_items as $cart_item_id) {
-                // Ambil detail item dari cart_items
-                $queryItem = "SELECT ci.*, p.product_stock 
-                              FROM cart_items ci 
-                              JOIN product p ON ci.product_id = p.product_id 
-                              WHERE ci.cart_item_id = '$cart_item_id'";
-                $resultItem = mysqli_query($conn, $queryItem);
-                $item = mysqli_fetch_assoc($resultItem);
+                    // Pindahkan item dari cart_items ke transaction_detail
+                    $queryCartItems = "SELECT * FROM cart_items ci
+                                       JOIN cart c ON ci.cart_id = c.cart_id
+                                       WHERE c.customer_id = '$customer_id'";
+                    $resultCartItems = mysqli_query($conn, $queryCartItems);
 
-                if ($item) {
-                    $product_id = $item['product_id'];
-                    $quantity = $item['quantity'];
-                    $total_price = $item['total_price'];
-                    $product_stock = $item['product_stock'];
+                    while ($item = mysqli_fetch_assoc($resultCartItems)) {
+                        $product_id = $item['product_id'];
+                        $quantity = $item['quantity'];
+                        $total_price = $item['total_price'];
 
-                    // Periksa stok produk
-                    if ($quantity > $product_stock) {
-                        throw new Exception("Stok tidak mencukupi untuk produk ID $product_id.");
+                        // Insert detail transaksi ke tabel transaction_detail
+                        $queryInsertDetail = "INSERT INTO transaction_detail (transaction_id, product_id, quantity, total_price, status, payment_proof)
+                                              VALUES ('$transaction_id', '$product_id', '$quantity', '$total_price', 'Pending', '$target_file')";
+                        mysqli_query($conn, $queryInsertDetail);
                     }
 
-                    // Insert ke tabel transaction_detail
-                    $queryTransactionDetail = "INSERT INTO transaction_detail (transaction_id, product_id, quantity, total_price) 
-                                               VALUES ('$transaction_id', '$product_id', '$quantity', '$total_price')";
-                    mysqli_query($conn, $queryTransactionDetail);
-
-                    // Update stok produk
-                    $new_stock = $product_stock - $quantity;
-                    $queryUpdateStock = "UPDATE product SET product_stock = '$new_stock' WHERE product_id = '$product_id'";
-                    mysqli_query($conn, $queryUpdateStock);
-
                     // Hapus item dari cart_items
-                    $queryDeleteCartItem = "DELETE FROM cart_items WHERE cart_item_id = '$cart_item_id'";
-                    mysqli_query($conn, $queryDeleteCartItem);
-                } else {
-                    throw new Exception("Item dengan ID $cart_item_id tidak ditemukan.");
-                }
-            }
+                    $queryDeleteCart = "DELETE ci FROM cart_items ci
+                                        JOIN cart c ON ci.cart_id = c.cart_id
+                                        WHERE c.customer_id = '$customer_id'";
+                    mysqli_query($conn, $queryDeleteCart);
 
-            // Commit transaksi
-            mysqli_commit($conn);
-            $_SESSION['alert'] = "Checkout berhasil!";
-            header("Location: transaction_history.php");
-            exit;
-        } catch (Exception $e) {
-            // Rollback jika ada error
-            mysqli_rollback($conn);
-            $_SESSION['alert'] = "Checkout gagal: " . $e->getMessage();
-            header("Location: cart.php");
-            exit;
+                    //hapus data cart
+                    $queryDeleteCart = "DELETE FROM cart WHERE customer_id = '$customer_id'";
+                    mysqli_query($conn, $queryDeleteCart);
+
+                    $_SESSION['alert'] = "Pembayaran berhasil! Transaksi Anda sedang diproses.";
+                    header("Location: transaction_history.php");
+                    exit;
+                } else {
+                    $_SESSION['alert'] = "Terjadi kesalahan saat memproses transaksi.";
+                }
+            } else {
+                $_SESSION['alert'] = "Gagal mengunggah bukti pembayaran.";
+            }
+        } else {
+            $_SESSION['alert'] = "Format file tidak valid. Harap unggah file gambar (jpg, jpeg, png, gif).";
         }
     } else {
-        $_SESSION['alert'] = "Tidak ada item yang dipilih untuk checkout.";
-        header("Location: cart.php");
-        exit;
+        $_SESSION['alert'] = "Harap unggah bukti pembayaran.";
     }
 }
+
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | MikroTik E-Commerce</title>
+    <link href="style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* CSS tambahan untuk memastikan form terletak di tengah */
+        .centered-container {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+<div class="container centered-container">
+    <div class="w-100" style="max-width: 600px;">
+        <h2 class="my-4 text-center">Checkout</h2>
+
+        <?php
+        if (isset($_SESSION['alert'])) {
+            echo '<div class="alert alert-info">' . $_SESSION['alert'] . '</div>';
+            unset($_SESSION['alert']);
+        }
+        ?>
+
+        <h4 class="text-center">Bank Transfer</h4>
+        <p><strong>Bank:</strong> BCA</p>
+        <p><strong>Nomor Rekening:</strong> 1234567890</p>
+        <p><strong>Atas Nama:</strong> Agus</p>
+
+        <form action="checkout.php" method="POST" enctype="multipart/form-data">
+            <div class="mb-3 text-center">
+                <h4>Total Belanja: Rp. <?php echo number_format($totalPrice, 2); ?></h4>
+            </div>
+
+            <div class="mb-3">
+                <label for="payment_proof" class="form-label">Unggah Bukti Pembayaran</label>
+                <input type="file" name="payment_proof" id="payment_proof" class="form-control" required>
+            </div>
+
+            <button type="submit" name="confirm_payment" class="btn btn-success w-100">Konfirmasi Pembayaran</button>
+        </form>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

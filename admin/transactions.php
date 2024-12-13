@@ -23,7 +23,7 @@ if ($searchQuery != '') {
     $query = "SELECT t.transaction_id, t.transaction_date, 
                  CONCAT(c.first_name, ' ', c.last_name) AS customer_name, 
                  c.email, c.phone_number, 
-                 p.product_name, td.quantity, td.total_price, td.status
+                 p.product_name, td.quantity, td.total_price, td.status, td.payment_proof
           FROM transaction t
           JOIN transaction_detail td ON t.transaction_id = td.transaction_id
           JOIN customer c ON t.customer_id = c.customer_id
@@ -38,7 +38,7 @@ if ($searchQuery != '') {
     $query = "SELECT t.transaction_id, t.transaction_date, 
                      CONCAT(c.first_name, ' ', c.last_name) AS customer_name, 
                      c.email, c.phone_number, 
-                     p.product_name, td.quantity, td.total_price , td.status
+                     p.product_name, td.quantity, td.total_price , td.status, td.payment_proof
               FROM transaction t
               JOIN transaction_detail td ON t.transaction_id = td.transaction_id
               JOIN customer c ON t.customer_id = c.customer_id
@@ -64,6 +64,9 @@ $result = mysqli_query($conn, $query);
         }
         body {
             padding-top: 40px; /* Sesuaikan dengan tinggi navbar */
+        }
+        .modal img {
+            max-width: 100%;
         }
     </style>
 </head>
@@ -143,8 +146,29 @@ $result = mysqli_query($conn, $query);
                                 <td>' . $row['status'] . '</td>
                                 <td>
                                     <a href="edit_transaction.php?transaction_id=' . $row['transaction_id'] . '" class="btn btn-primary btn-sm">Edit</a>
+                                    <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#proofModal' . $row['transaction_id'] . '">Bukti</button>
                                 </td>
                               </tr>';
+
+                              
+
+                        // Modal for Payment Proof
+                        echo '<div class="modal fade" id="proofModal' . $row['transaction_id'] . '" tabindex="-1" aria-labelledby="proofModalLabel' . $row['transaction_id'] . '" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="proofModalLabel' . $row['transaction_id'] . '">Payment Proof</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body text-center">
+                                            <img src="' . $row['payment_proof'] . '" alt="Payment Proof" class="img-fluid">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>';
                     }
                 } else {
                     echo '<tr><td colspan="9" class="text-center">No transactions found.</td></tr>';

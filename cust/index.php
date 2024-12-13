@@ -102,8 +102,10 @@ if(session_id() == '' || !isset($_SESSION)){ session_start(); }
     </section>
 
     <!-- Footer -->
-    <footer class="footer">
-        <p>&copy; 2024 MikroTik E-Commerce | All Rights Reserved</p>
+    <footer class="bg-dark text-white text-center py-3 mt-auto">
+        <div class="container">
+            <p class="mb-0">&copy; 2024 MikroTik E-Commerce | All Rights Reserved</p>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>

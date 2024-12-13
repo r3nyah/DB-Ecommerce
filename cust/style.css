@@ -131,3 +131,7 @@ header {
 .register-form .btn-primary:hover {
     background-color: #E04343;
 }
+
+.img-fluid{
+    border: 3px solid #FF4B4B;  
+}
