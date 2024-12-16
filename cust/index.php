@@ -8,7 +8,7 @@ if(session_id() == '' || !isset($_SESSION)){ session_start(); }
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MikroTik E-Commerce</title>
-    <link rel="icon" href="favicon.ico" type="images/logo.jpg">
+    <link rel="icon" href="favicon.ico" type="images/logo.jpg" >
     <link href="style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -18,7 +18,7 @@ if(session_id() == '' || !isset($_SESSION)){ session_start(); }
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-fluid">
                 <a class="navbar-brand" href="">
-                    <img src="images/logo.jpg" alt="Logo"> Lintas Buana
+                    <img src="images/logo.png" alt="Logo"> Lintas Buana
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>

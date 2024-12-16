@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 10, 2024 at 04:05 AM
+-- Generation Time: Dec 15, 2024 at 01:03 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -39,7 +39,11 @@ CREATE TABLE `admin` (
 --
 
 INSERT INTO `admin` (`admin_id`, `username`, `password`, `email`) VALUES
-(1, 'aku', '89ccfac87d8d06db06bf3211cb2d69ed', 'aku@gmail.com');
+(1, 'aku', '89ccfac87d8d06db06bf3211cb2d69ed', 'aku@gmail.com'),
+(2, 'ado', '421359a899e6aeb972c11a26fb52ad15', 'ado@gmail.com'),
+(3, 'anis', '38a1ffb5ccad9612d3d28d99488ca94b', 'ana@gmail.com'),
+(4, 'aniss', '38a1ffb5ccad9612d3d28d99488ca94b', 'anad@gmail.com'),
+(5, 'aaaa', '74b87337454200d4d33f80c4663dc5e5', 'agus@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -57,8 +61,8 @@ CREATE TABLE `cart` (
 --
 
 INSERT INTO `cart` (`cart_id`, `customer_id`) VALUES
-(4, 4),
-(5, 7);
+(8, 4),
+(9, 5);
 
 -- --------------------------------------------------------
 
@@ -68,11 +72,18 @@ INSERT INTO `cart` (`cart_id`, `customer_id`) VALUES
 
 CREATE TABLE `cart_items` (
   `cart_item_id` int(11) NOT NULL,
-  `cart_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT 1,
-  `total_price` decimal(10,2) DEFAULT NULL
+  `cart_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `total_price` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart_items`
+--
+
+INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `total_price`) VALUES
+(25, 9, 1, 3, 60000.00);
 
 -- --------------------------------------------------------
 
@@ -117,7 +128,11 @@ INSERT INTO `customer` (`customer_id`, `first_name`, `last_name`, `email`, `phon
 (5, 'arifin', 'ilham', 'ilhamku2005@gmail.com', '082132137431', ''),
 (7, 'ana', 'ef', 'aguse@gmail.com', 'adsad', ''),
 (8, 'arifin', 'ef', 'aguswe@gmail.com', 'addww', ''),
-(9, 'ae', 'raidi', 'agusge@gmail.com', '082132137431', 'addww');
+(9, 'ae', 'raidi', 'agusge@gmail.com', '082132137431', 'addww'),
+(11, 'agus', 'effendi', 'agussss@gmail.com', '131313313', 'malang'),
+(12, 'arian', 'febrian', 'arian1@gmail.com', '082132137431', 'madura'),
+(13, 'arzak', 'arzak', 'arzak@gmail.com', '082132137431', 'sby'),
+(14, 'anad', 'anad', 'qwewqe@gmail.com', '082132137431', 'qwe');
 
 -- --------------------------------------------------------
 
@@ -127,7 +142,7 @@ INSERT INTO `customer` (`customer_id`, `first_name`, `last_name`, `email`, `phon
 
 CREATE TABLE `login` (
   `login_id` int(11) NOT NULL,
-  `customer_id` int(11) DEFAULT NULL,
+  `customer_id` int(11) NOT NULL,
   `username` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -141,7 +156,11 @@ INSERT INTO `login` (`login_id`, `customer_id`, `username`, `password`) VALUES
 (5, 5, 'arifin', '$2y$10$wEq0cqY2cx1nCwGT/lfpSODFuex3MqSE3v9pk3cwNjiCw/BWajP5i'),
 (6, 7, 'ae', '$2y$10$LgynevrxA6OVR/2/DawT6u0KjELgLMaK00.gNtxSR/fm6jZlzEmx.'),
 (7, 8, 'ags', '$2y$10$c3IUJwoMD6a8IytQ9LTb3.YqotPbFD4ao43ffn2fm12FKbWqaYYQy'),
-(8, 9, 'ads', '$2y$10$na4VEwbzaIigNYStLWgF5.3JHDyPX5r1Jovvls/BY1zoRkzazALTa');
+(8, 9, 'ads', '$2y$10$na4VEwbzaIigNYStLWgF5.3JHDyPX5r1Jovvls/BY1zoRkzazALTa'),
+(9, 11, 'agoes', '$2y$10$TJe7fDxtkQrz5HVJu/Eln.oJikBKYpPX24UnNSkvXipPCvBEhWO/a'),
+(10, 12, 'arian', '$2y$10$nXMTQbVYfH.aCgb9OJTZVuBPAw8n5jQyZkzxaa7K3PH05fgNQ.XMS'),
+(11, 13, 'arz', '$2y$10$d2TKtSziZwz7HZKd.aHH5.ADxLKrr.BJqW3oI2B9RlGgdFW.ZiVCG'),
+(12, 14, 'qwe', '$2y$10$f2V/zM9sdkeoS7las6DSv.A/NED1g.FsMeQPO6dgYk5XH1YCfoSHK');
 
 -- --------------------------------------------------------
 
@@ -154,9 +173,9 @@ CREATE TABLE `product` (
   `product_name` varchar(100) NOT NULL,
   `product_price` decimal(10,2) NOT NULL,
   `product_description` text DEFAULT NULL,
-  `category_id` int(11) DEFAULT NULL,
+  `category_id` int(11) NOT NULL,
   `product_image` varchar(255) NOT NULL,
-  `product_stock` int(11) DEFAULT NULL
+  `product_stock` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -164,9 +183,8 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`product_id`, `product_name`, `product_price`, `product_description`, `category_id`, `product_image`, `product_stock`) VALUES
-(1, 'gigarouteer', 20000.00, 'asdqwdsadsadqwdasdqwdqwdasdasdqweqw', 1, 'images/yy.jpg', 5),
-(22, 'rout2', 0.00, NULL, 1, 'images/logo.jpg', 28),
-(27, 'rrrrr', 30000.00, 'qweeerrrrre', 1, 'images/yy.jpg', 3);
+(1, 'router1', 20000.00, 'asdqwdsadsadqwdasdqwdqwdasdasdqweqw', 1, 'images/yy.jpg', 11),
+(22, 'rout2', 20000.00, 'dasdqdwqd', 1, 'images/yy.jpg', 22);
 
 -- --------------------------------------------------------
 
@@ -185,14 +203,9 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`transaction_id`, `transaction_date`, `customer_id`) VALUES
-(4, '2024-11-21 10:41:29', 4),
-(5, '2024-11-21 10:43:27', 4),
-(6, '2024-11-21 11:50:46', 4),
-(7, '2024-11-22 00:52:56', 4),
-(8, '2024-12-08 14:33:15', 7),
-(9, '2024-12-10 01:39:57', 4),
-(10, '2024-12-10 01:59:29', 4),
-(11, '2024-12-10 02:30:30', 4);
+(26, '2024-12-13 11:06:57', 7),
+(27, '2024-12-13 11:07:24', 7),
+(28, '2024-12-13 17:16:27', 7);
 
 -- --------------------------------------------------------
 
@@ -206,22 +219,18 @@ CREATE TABLE `transaction_detail` (
   `product_id` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `total_price` decimal(10,2) DEFAULT NULL,
-  `status` enum('cancelled','process','complete') DEFAULT 'process'
+  `status` enum('cancelled','pending','completed') DEFAULT 'pending',
+  `payment_proof` varchar(255) DEFAULT NULL,
+  `transaction_description` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `transaction_detail`
 --
 
-INSERT INTO `transaction_detail` (`transaction_detail_id`, `transaction_id`, `product_id`, `quantity`, `total_price`, `status`) VALUES
-(1, 4, 1, 4, 80000.00, 'complete'),
-(3, 6, 1, 3, 60000.00, 'process'),
-(4, 7, 1, 3, 60000.00, 'process'),
-(7, 9, 27, 2, 60000.00, 'process'),
-(8, 10, 22, 2, 0.00, 'process'),
-(9, 10, 27, 2, 60000.00, 'process'),
-(10, 11, 1, 2, 40000.00, 'process'),
-(11, 11, 27, 2, 60000.00, 'process');
+INSERT INTO `transaction_detail` (`transaction_detail_id`, `transaction_id`, `product_id`, `quantity`, `total_price`, `status`, `payment_proof`, `transaction_description`) VALUES
+(27, 27, 1, 1, 20000.00, 'pending', NULL, ''),
+(28, 28, 1, 2, 40000.00, 'cancelled', 'uploads/proof.jpeg', 'berhasil');
 
 --
 -- Indexes for dumped tables
@@ -299,19 +308,19 @@ ALTER TABLE `transaction_detail`
 -- AUTO_INCREMENT for table `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `admin_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -323,13 +332,13 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `customer`
 --
 ALTER TABLE `customer`
-  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `customer_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `login`
 --
 ALTER TABLE `login`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `product`
@@ -341,13 +350,13 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `transaction_detail`
 --
 ALTER TABLE `transaction_detail`
-  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- Constraints for dumped tables

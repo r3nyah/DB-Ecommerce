@@ -15,7 +15,7 @@ if (isset($_GET['transaction_id'])) {
     $transactionId = $_GET['transaction_id'];
 
     // Query untuk mengambil data transaksi berdasarkan ID
-    $query = "SELECT t.transaction_id, td.status 
+    $query = "SELECT t.transaction_id, td.status, td.transaction_description 
               FROM transaction t
               JOIN transaction_detail td ON t.transaction_id = td.transaction_id
               WHERE t.transaction_id = $transactionId";
@@ -25,6 +25,7 @@ if (isset($_GET['transaction_id'])) {
     if (mysqli_num_rows($result) > 0) {
         $transaction = mysqli_fetch_assoc($result);
         $currentStatus = $transaction['status'];
+        $currentDescription = $transaction['transaction_description'];
     } else {
         echo "Transaction not found!";
         exit();
@@ -37,10 +38,11 @@ if (isset($_GET['transaction_id'])) {
 // Cek apakah form telah disubmit
 if (isset($_POST['submit'])) {
     $newStatus = $_POST['status'];
+    $newDescription = mysqli_real_escape_string($conn, $_POST['transaction_description']);
 
-    // Query untuk mengupdate status transaksi
+    // Query untuk mengupdate status dan deskripsi transaksi
     $updateQuery = "UPDATE transaction_detail 
-                    SET status = '$newStatus'
+                    SET status = '$newStatus', transaction_description = '$newDescription' 
                     WHERE transaction_id = $transactionId";
 
     if (mysqli_query($conn, $updateQuery)) {
@@ -94,8 +96,6 @@ if (isset($_POST['submit'])) {
                                 <a class="nav-link" href="admin/logout.php">Logout</a>
                             </li>
 
-                            
-
                         <?php else: ?>
                             <!-- Jika user belum login, tampilkan login dan register -->
                             <li class="nav-item">
@@ -113,7 +113,7 @@ if (isset($_POST['submit'])) {
 
     <!-- Edit Transaction Section -->
     <section class="container my-5">
-        <h2 class="text-center mb-4">Edit Transaction Status</h2>
+        <h2 class="text-center mb-4">Edit Transaction</h2>
 
         <form method="POST">
             <div class="mb-3">
@@ -130,7 +130,12 @@ if (isset($_POST['submit'])) {
                 </select>
             </div>
 
-            <button type="submit" name="submit" class="btn btn-primary">Update Status</button>
+            <div class="mb-3">
+                <label for="transaction_description" class="form-label">Transaction Description</label>
+                <textarea class="form-control" id="transaction_description" name="transaction_description" rows="3"><?php echo htmlspecialchars($currentDescription); ?></textarea>
+            </div>
+
+            <button type="submit" name="submit" class="btn btn-primary">Update Transaction</button>
         </form>
     </section>
 

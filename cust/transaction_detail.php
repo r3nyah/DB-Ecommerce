@@ -15,7 +15,7 @@ $transaction_id = $_GET['transaction_id'];
 $queryTransactionDetail = "
     SELECT td.transaction_detail_id, td.quantity, td.total_price, td.status, 
            p.product_name, p.product_price, p.product_description, 
-           c.category_name, cu.customer_address, t.transaction_date, t.transaction_id
+           c.category_name, cu.customer_address, t.transaction_date, t.transaction_id, td.transaction_description
     FROM transaction_detail td
     JOIN product p ON td.product_id = p.product_id
     JOIN category c ON p.category_id = c.category_id
@@ -43,6 +43,7 @@ $transaction_id = $transaction['transaction_id'];
 $transaction_date = $transaction['transaction_date'];
 $customer_address = $transaction['customer_address'];
 $transaction_status = $transaction['status'];  // Ambil status
+$transaction_description = $transaction['transaction_description'];  // Ambil deskripsi
 $total_price = 0;  // Variabel untuk menyimpan total harga transaksi
 
 // Hitung total harga transaksi
@@ -121,6 +122,9 @@ do {
             color: #333;
             text-align: right;
         }
+        .description {
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -151,6 +155,11 @@ do {
     <div class="address">
         <h4>Shipping Address</h4>
         <p><?php echo $customer_address; ?></p>
+    </div>
+
+    <div class="description">
+        <h4>Transaction Description</h4>
+        <p><?php echo $transaction_description; ?></p>
     </div>
 
     <div class="status">

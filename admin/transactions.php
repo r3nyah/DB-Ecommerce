@@ -76,7 +76,7 @@ $result = mysqli_query($conn, $query);
         <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php">
-                    <img src="images/logo.jpg" alt="Logo"> Lintas Buana
+                    <img src="images/logo.png" alt="Logo"> Lintas Buana
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
