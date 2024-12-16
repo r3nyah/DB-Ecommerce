@@ -119,7 +119,7 @@ if (isset($_POST['confirm_payment'])) {
         <h4 class="text-center">Bank Transfer</h4>
         <p><strong>Bank:</strong> BCA</p>
         <p><strong>Nomor Rekening:</strong> 1234567890</p>
-        <p><strong>Atas Nama:</strong> Agus</p>
+        <p><strong>Atas Nama:</strong> Lintas Buana</p>
 
         <form action="checkout.php" method="POST" enctype="multipart/form-data">
             <div class="mb-3 text-center">

@@ -50,7 +50,7 @@ $startFrom = ($page - 1) * $productsPerPage; // Mulai dari produk ke-...
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav me-auto">
                         <li class="nav-item">
                             <a class="nav-link" href="index.php">Home</a>
                         </li>
@@ -79,9 +79,28 @@ $startFrom = ($page - 1) * $productsPerPage; // Mulai dari produk ke-...
                     </ul>
 
                     <!-- Search Form -->
-                    <form class="d-flex ms-auto" method="GET" action="products.php">
+                    <form class="d-flex me-2" method="GET" action="products.php">
                         <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search" name="search" value="<?php echo $searchQuery; ?>">
                         <button class="btn btn-outline-light" type="submit">Search</button>
+                    </form>
+
+                    <form method="GET" action="products.php" class="d-flex me-2">
+                        <select name="category" id="category_id" class="form-select me-2">
+                            <option value="">All Categories</option>
+                            <?php
+                            // Fetch categories from the database
+                            include 'config.php';
+                            $categoryQuery = "SELECT category_id, category_name FROM category";
+                            $categoryResult = mysqli_query($conn, $categoryQuery);
+
+                            // Populate the dropdown with categories
+                            while ($category = mysqli_fetch_assoc($categoryResult)) {
+                                $selected = (isset($_GET['category']) && $_GET['category'] == $category['category_id']) ? 'selected' : '';
+                                echo "<option value='{$category['category_id']}' $selected>{$category['category_name']}</option>";
+                            }
+                            ?>
+                        </select>
+                        <button type="submit" class="btn btn-outline-light">Filter</button>
                     </form>
                 </div>
             </div>
@@ -97,8 +116,14 @@ $startFrom = ($page - 1) * $productsPerPage; // Mulai dari produk ke-...
             include 'config.php'; // Pastikan file config.php sudah ada dan terhubung ke database
 
             // Query untuk mengambil data produk dengan pagination dan pencarian
-            if ($searchQuery != '') {
+            $categoryFilter = isset($_GET['category']) ? $_GET['category'] : '';
+
+            if ($searchQuery != '' && $categoryFilter != '') {
+                $query = "SELECT product_id, product_name, product_price, product_image FROM product WHERE product_name LIKE '%$searchQuery%' AND category_id = " . intval($categoryFilter) . " LIMIT $startFrom, $productsPerPage";
+            } elseif ($searchQuery != '') {
                 $query = "SELECT product_id, product_name, product_price, product_image FROM product WHERE product_name LIKE '%$searchQuery%' LIMIT $startFrom, $productsPerPage";
+            } elseif ($categoryFilter != '') {
+                $query = "SELECT product_id, product_name, product_price, product_image FROM product WHERE category_id = " . intval($categoryFilter) . " LIMIT $startFrom, $productsPerPage";
             } else {
                 $query = "SELECT product_id, product_name, product_price, product_image FROM product LIMIT $startFrom, $productsPerPage";
             }
@@ -137,11 +162,16 @@ $startFrom = ($page - 1) * $productsPerPage; // Mulai dari produk ke-...
             <ul class="pagination justify-content-center">
                 <?php
                 // Query untuk menghitung total produk
-                if ($searchQuery != '') {
+                if ($searchQuery != '' && $categoryFilter != '') {
+                    $totalQuery = "SELECT COUNT(*) AS total FROM product WHERE product_name LIKE '%$searchQuery%' AND category_id = " . intval($categoryFilter);
+                } elseif ($searchQuery != '') {
                     $totalQuery = "SELECT COUNT(*) AS total FROM product WHERE product_name LIKE '%$searchQuery%'";
+                } elseif ($categoryFilter != '') {
+                    $totalQuery = "SELECT COUNT(*) AS total FROM product WHERE category_id = " . intval($categoryFilter);
                 } else {
                     $totalQuery = "SELECT COUNT(*) AS total FROM product";
                 }
+                
                 $totalResult = mysqli_query($conn, $totalQuery);
                 $totalRow = mysqli_fetch_assoc($totalResult);
                 $totalProducts = $totalRow['total'];

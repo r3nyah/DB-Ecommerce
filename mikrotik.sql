@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 15, 2024 at 01:03 PM
+-- Generation Time: Dec 16, 2024 at 03:50 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -62,7 +62,8 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`cart_id`, `customer_id`) VALUES
 (8, 4),
-(9, 5);
+(9, 5),
+(13, 7);
 
 -- --------------------------------------------------------
 
@@ -83,7 +84,8 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `total_price`) VALUES
-(25, 9, 1, 3, 60000.00);
+(25, 9, 1, 3, 60000.00),
+(40, 13, 22, 1, 1500000.00);
 
 -- --------------------------------------------------------
 
@@ -102,7 +104,9 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_name`) VALUES
 (1, 'router'),
-(2, 'hub');
+(2, 'hub'),
+(3, 'antena'),
+(4, 'switch');
 
 -- --------------------------------------------------------
 
@@ -183,8 +187,9 @@ CREATE TABLE `product` (
 --
 
 INSERT INTO `product` (`product_id`, `product_name`, `product_price`, `product_description`, `category_id`, `product_image`, `product_stock`) VALUES
-(1, 'router1', 20000.00, 'asdqwdsadsadqwdasdqwdqwdasdasdqweqw', 1, 'images/yy.jpg', 11),
-(22, 'rout2', 20000.00, 'dasdqdwqd', 1, 'images/yy.jpg', 22);
+(1, 'Antena Omni Vezatech 15 dbi 2.4 Ghz ( Connect )', 775000.00, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 3, 'images/yy.jpg', 11),
+(22, 'UBNT Edge Point Router 6 24 V EP-R6 ( Gloria )', 1500000.00, 'LorLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumx ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 1, 'images/ubiquiti.jpg', 22),
+(28, 'UBNT Unifi Switch FLEX USW-FLEX ( Spectrum )', 1688865.00, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 4, 'images/ubiquitiswc.jpeg', 10);
 
 -- --------------------------------------------------------
 
@@ -203,9 +208,9 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`transaction_id`, `transaction_date`, `customer_id`) VALUES
-(26, '2024-12-13 11:06:57', 7),
-(27, '2024-12-13 11:07:24', 7),
-(28, '2024-12-13 17:16:27', 7);
+(29, '2024-12-16 08:22:54', 7),
+(30, '2024-11-20 08:25:09', 7),
+(31, '2024-08-21 08:25:09', 7);
 
 -- --------------------------------------------------------
 
@@ -229,8 +234,9 @@ CREATE TABLE `transaction_detail` (
 --
 
 INSERT INTO `transaction_detail` (`transaction_detail_id`, `transaction_id`, `product_id`, `quantity`, `total_price`, `status`, `payment_proof`, `transaction_description`) VALUES
-(27, 27, 1, 1, 20000.00, 'pending', NULL, ''),
-(28, 28, 1, 2, 40000.00, 'cancelled', 'uploads/proof.jpeg', 'berhasil');
+(29, 29, 22, 3, 4500000.00, 'pending', 'uploads/proof.jpeg', ''),
+(30, 30, 1, 1, 775000.00, 'pending', 'uploads/proof.jpeg', ''),
+(31, 31, 28, 1, 1688865.00, 'pending', 'uploads/proof.jpeg', '');
 
 --
 -- Indexes for dumped tables
@@ -314,19 +320,19 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -344,19 +350,19 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `transaction_detail`
 --
 ALTER TABLE `transaction_detail`
-  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- Constraints for dumped tables
