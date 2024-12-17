@@ -15,11 +15,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $result = mysqli_query($conn, $query);
 
     if (mysqli_num_rows($result) === 1) {
-        $_SESSION['admin'] = $username;
+        $row = mysqli_fetch_assoc($result);
+        $_SESSION['admin'] = $username; // Menyimpan username admin
+        $_SESSION['admin_id'] = $row['admin_id']; // Menyimpan admin_id dalam sesi
         header("Location: ../index.php");
         exit;
     } else {
         $error = "Invalid username or password!";
     }
 }
+
 ?>

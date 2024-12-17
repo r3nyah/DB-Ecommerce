@@ -1,6 +1,12 @@
 <?php
 include 'config.php'; // Menyertakan file koneksi
 
+if (!isset($_SESSION['admin'])) {
+    // Jika belum login, arahkan ke halaman login
+    header("Location: login_form.php");
+    exit();
+}
+
 // Pastikan ada ID produk yang dikirimkan melalui URL
 if (!isset($_GET['id'])) {
     header("Location: products.php?error=ProductIDMissing");

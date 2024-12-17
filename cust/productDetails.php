@@ -103,11 +103,14 @@ if ($productID) {
                 <p><strong>Stock:</strong> <?= number_format($product['product_stock']) ?></p>
                 <a href="products.php" class="btn btn-secondary">Back to Products</a>
                 <form action="add_to_cart.php" method="POST" class="mt-3">
-                    <input type="hidden" name="product_id" value="<?= htmlspecialchars($productID) ?>">
-                    <label for="quantity" class="form-label">Quantity:</label>
-                    <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control w-25 mb-3">
-                    <button type="submit" class="btn btn-primary">Add to Cart</button>
-                </form>
+    <input type="hidden" name="product_id" value="<?= htmlspecialchars($productID) ?>">
+    <label for="quantity" class="form-label">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" value="1" 
+           min="1" 
+           max="<?= $product['product_stock'] ?>" 
+           class="form-control w-25 mb-3">
+    <button type="submit" class="btn btn-primary">Add to Cart</button>
+</form>
             </div>
         </div>
     </section>

@@ -1,27 +1,22 @@
 <?php
 session_start();
 
-// Cek apakah pengguna sudah login
 if (!isset($_SESSION['admin'])) {
-    // Jika belum login, arahkan ke halaman login
     header("Location: login_form.php");
     exit();
 }
 
-include 'config.php'; // Koneksi ke database
+include 'config.php';
 
-// Cek apakah ada ID transaksi yang diterima melalui URL
 if (isset($_GET['transaction_id'])) {
     $transactionId = $_GET['transaction_id'];
 
-    // Query untuk mengambil data transaksi berdasarkan ID
     $query = "SELECT t.transaction_id, td.status, td.transaction_description 
               FROM transaction t
               JOIN transaction_detail td ON t.transaction_id = td.transaction_id
               WHERE t.transaction_id = $transactionId";
     $result = mysqli_query($conn, $query);
 
-    // Jika transaksi ditemukan
     if (mysqli_num_rows($result) > 0) {
         $transaction = mysqli_fetch_assoc($result);
         $currentStatus = $transaction['status'];
@@ -35,18 +30,20 @@ if (isset($_GET['transaction_id'])) {
     exit();
 }
 
-// Cek apakah form telah disubmit
 if (isset($_POST['submit'])) {
     $newStatus = $_POST['status'];
     $newDescription = mysqli_real_escape_string($conn, $_POST['transaction_description']);
+    $adminId = $_SESSION['admin_id']; // Ambil admin_id dari session
 
-    // Query untuk mengupdate status dan deskripsi transaksi
-    $updateQuery = "UPDATE transaction_detail 
-                    SET status = '$newStatus', transaction_description = '$newDescription' 
-                    WHERE transaction_id = $transactionId";
+    $updateQueryDetail = "UPDATE transaction_detail 
+                          SET status = '$newStatus', transaction_description = '$newDescription' 
+                          WHERE transaction_id = $transactionId";
 
-    if (mysqli_query($conn, $updateQuery)) {
-        // Redirect setelah berhasil update
+    $updateQueryTransaction = "UPDATE transaction 
+                               SET admin_id = '$adminId'
+                               WHERE transaction_id = $transactionId";
+
+    if (mysqli_query($conn, $updateQueryDetail) && mysqli_query($conn, $updateQueryTransaction)) {
         header("Location: transactions.php");
         exit();
     } else {
@@ -54,6 +51,7 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

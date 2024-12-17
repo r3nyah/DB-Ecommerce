@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 16, 2024 at 03:50 AM
+-- Generation Time: Dec 17, 2024 at 01:47 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -62,8 +62,7 @@ CREATE TABLE `cart` (
 
 INSERT INTO `cart` (`cart_id`, `customer_id`) VALUES
 (8, 4),
-(9, 5),
-(13, 7);
+(9, 5);
 
 -- --------------------------------------------------------
 
@@ -84,8 +83,7 @@ CREATE TABLE `cart_items` (
 --
 
 INSERT INTO `cart_items` (`cart_item_id`, `cart_id`, `product_id`, `quantity`, `total_price`) VALUES
-(25, 9, 1, 3, 60000.00),
-(40, 13, 22, 1, 1500000.00);
+(25, 9, 1, 3, 60000.00);
 
 -- --------------------------------------------------------
 
@@ -200,17 +198,19 @@ INSERT INTO `product` (`product_id`, `product_name`, `product_price`, `product_d
 CREATE TABLE `transaction` (
   `transaction_id` int(11) NOT NULL,
   `transaction_date` datetime DEFAULT current_timestamp(),
-  `customer_id` int(11) DEFAULT NULL
+  `customer_id` int(11) DEFAULT NULL,
+  `admin_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `transaction`
 --
 
-INSERT INTO `transaction` (`transaction_id`, `transaction_date`, `customer_id`) VALUES
-(29, '2024-12-16 08:22:54', 7),
-(30, '2024-11-20 08:25:09', 7),
-(31, '2024-08-21 08:25:09', 7);
+INSERT INTO `transaction` (`transaction_id`, `transaction_date`, `customer_id`, `admin_id`) VALUES
+(29, '2024-12-16 08:22:54', 7, 1),
+(30, '2024-11-20 08:25:09', 7, NULL),
+(31, '2024-08-21 08:25:09', 7, NULL),
+(32, '2024-12-16 19:04:49', 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -234,9 +234,11 @@ CREATE TABLE `transaction_detail` (
 --
 
 INSERT INTO `transaction_detail` (`transaction_detail_id`, `transaction_id`, `product_id`, `quantity`, `total_price`, `status`, `payment_proof`, `transaction_description`) VALUES
-(29, 29, 22, 3, 4500000.00, 'pending', 'uploads/proof.jpeg', ''),
+(29, 29, 22, 3, 4500000.00, 'completed', 'uploads/proof.jpeg', 'berhasil'),
 (30, 30, 1, 1, 775000.00, 'pending', 'uploads/proof.jpeg', ''),
-(31, 31, 28, 1, 1688865.00, 'pending', 'uploads/proof.jpeg', '');
+(31, 31, 28, 1, 1688865.00, 'pending', 'uploads/proof.jpeg', ''),
+(32, 32, 22, 1, 1500000.00, 'pending', 'uploads/proof.jpeg', ''),
+(33, 32, 1, 2, 1550000.00, 'pending', 'uploads/proof.jpeg', '');
 
 --
 -- Indexes for dumped tables
@@ -296,7 +298,8 @@ ALTER TABLE `product`
 --
 ALTER TABLE `transaction`
   ADD PRIMARY KEY (`transaction_id`),
-  ADD KEY `customer_id` (`customer_id`);
+  ADD KEY `customer_id` (`customer_id`),
+  ADD KEY `fk_admin_id` (`admin_id`);
 
 --
 -- Indexes for table `transaction_detail`
@@ -326,7 +329,7 @@ ALTER TABLE `cart`
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 
 --
 -- AUTO_INCREMENT for table `category`
@@ -356,13 +359,13 @@ ALTER TABLE `product`
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `transaction_detail`
 --
 ALTER TABLE `transaction_detail`
-  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- Constraints for dumped tables
@@ -397,6 +400,7 @@ ALTER TABLE `product`
 -- Constraints for table `transaction`
 --
 ALTER TABLE `transaction`
+  ADD CONSTRAINT `fk_admin_id` FOREIGN KEY (`admin_id`) REFERENCES `admin` (`admin_id`),
   ADD CONSTRAINT `transaction_ibfk_1` FOREIGN KEY (`customer_id`) REFERENCES `customer` (`customer_id`);
 
 --

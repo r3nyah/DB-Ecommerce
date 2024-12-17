@@ -9,6 +9,7 @@ if (!isset($_SESSION['admin'])) {
 }
 
 include 'config.php'; // Koneksi ke database
+$adminId = $_SESSION['admin_id'];
 
 // Konfigurasi pagination
 $transactionsPerPage = 8; // Jumlah transaksi per halaman
