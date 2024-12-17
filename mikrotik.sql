@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 17, 2024 at 01:47 AM
+-- Generation Time: Dec 17, 2024 at 12:57 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -102,9 +102,9 @@ CREATE TABLE `category` (
 
 INSERT INTO `category` (`category_id`, `category_name`) VALUES
 (1, 'router'),
-(2, 'hub'),
 (3, 'antena'),
-(4, 'switch');
+(4, 'switch'),
+(5, 'RJ45 Connector');
 
 -- --------------------------------------------------------
 
@@ -126,15 +126,15 @@ CREATE TABLE `customer` (
 --
 
 INSERT INTO `customer` (`customer_id`, `first_name`, `last_name`, `email`, `phone_number`, `customer_address`) VALUES
-(4, 'agus', 'ef', 'agus@gmail.com', '082132137431', ''),
-(5, 'arifin', 'ilham', 'ilhamku2005@gmail.com', '082132137431', ''),
-(7, 'ana', 'ef', 'aguse@gmail.com', 'adsad', ''),
-(8, 'arifin', 'ef', 'aguswe@gmail.com', 'addww', ''),
-(9, 'ae', 'raidi', 'agusge@gmail.com', '082132137431', 'addww'),
-(11, 'agus', 'effendi', 'agussss@gmail.com', '131313313', 'malang'),
-(12, 'arian', 'febrian', 'arian1@gmail.com', '082132137431', 'madura'),
-(13, 'arzak', 'arzak', 'arzak@gmail.com', '082132137431', 'sby'),
-(14, 'anad', 'anad', 'qwewqe@gmail.com', '082132137431', 'qwe');
+(4, 'agus', 'efendi', 'agus@gmail.com', '082132137431', 'Jl. Sudirman No. 45, Kelurahan Setiabudi, Kecamatan Setiabudi, Jakarta Selatan, DKI Jakarta 12920'),
+(5, 'arifin', 'ilham', 'ilhamku2005@gmail.com', '08213107431', 'Jl. Diponegoro No. 17, Kelurahan Citarum, Kecamatan Bandung Wetan, Bandung, Jawa Barat 40115'),
+(7, 'ana', 'eni', 'ana@gmail.com', '085132137431', 'Jl. Malioboro No. 12, Kelurahan Suryatmajan, Kecamatan Danurejan, Yogyakarta 55213'),
+(8, 'arian', 'febrian', 'arian@gmail.com', '08213336631', 'Jl. Pemuda No. 88, Kelurahan Sekayu, Kecamatan Semarang Tengah, Semarang, Jawa Tengah 50132'),
+(9, 'agung', 'raidi', 'agungrde@gmail.com', '082135037431', 'Jl. Basuki Rahmat No. 25, Kelurahan Kedungdoro, Kecamatan Tegalsari, Surabaya, Jawa Timur 60261'),
+(11, 'anas', 'haryadi', 'an.harya@gmail.com', '08515037431', 'Jl. Ahmad Yani No. 10, Kelurahan Kedungrejo, Kecamatan Waru, Sidoarjo, Jawa Timur 61256'),
+(12, 'ari', 'gumilang', 'arigu@gmail.com', '082135037431', 'Jl. Asia Afrika No. 9, Kelurahan Braga, Kecamatan Sumur Bandung, Bandung, Jawa Barat 40111'),
+(13, 'arzak', 'kristiawan', 'arzakchillguyjakbar@gmail.com', '085132137431', 'Jl. Panglima Sudirman No. 34, Kelurahan Sukorejo, Kecamatan Blimbing, Malang, Jawa Timur 65125'),
+(14, 'ahmad', 'dana', 'danaahmad@gmail.com', '0815537431', 'Jl. Kartini No. 5, Kelurahan Kartini, Kecamatan Sawah Besar, Jakarta Pusat, DKI Jakarta 10750');
 
 -- --------------------------------------------------------
 
@@ -187,7 +187,12 @@ CREATE TABLE `product` (
 INSERT INTO `product` (`product_id`, `product_name`, `product_price`, `product_description`, `category_id`, `product_image`, `product_stock`) VALUES
 (1, 'Antena Omni Vezatech 15 dbi 2.4 Ghz ( Connect )', 775000.00, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 3, 'images/yy.jpg', 11),
 (22, 'UBNT Edge Point Router 6 24 V EP-R6 ( Gloria )', 1500000.00, 'LorLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborumx ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 1, 'images/ubiquiti.jpg', 22),
-(28, 'UBNT Unifi Switch FLEX USW-FLEX ( Spectrum )', 1688865.00, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 4, 'images/ubiquitiswc.jpeg', 10);
+(28, 'UBNT Unifi Switch FLEX USW-FLEX ( Spectrum )', 1688865.00, 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum', 4, 'images/ubiquitiswc.jpeg', 10),
+(29, 'SFP to RJ45 S-RJ01', 460000.00, 'MikroTik S+RJ10 / SFP S RJ10 / SFP MikroTik S+RJ10 ini membuka seluruh dunia dengan kemungkinan konektivitas berkecepatan tinggi, menawarkan kecepatan hingga 10 Gbps', 5, 'images/S-RJ01_2.jpg', 10),
+(30, 'Dlink DWR-M910 Wireless N300 4G LTE Router', 500000.00, 'Dlink DWR-M910 Wireless N300 4G LTE Router  2.4GHz (300Mbps)', 1, 'images/drou.png', 30),
+(31, 'Antena Omni HG5812U-PRO Hyperlink 12 dbi', 1850000.00, 'Hyperlink Omni Directional 12db 5,8ghz', 3, 'images/ann 11.jpg', 8),
+(32, 'Switch Dlink 24 Port DGS 1100-24 EasySmart Switch 12 10', 1614000.00, 'TEG1024F provides 24 10/100/1000 Mbps auto-negotiation RJ45 ports, 2 gigabit SFP slots and offers a data rate in full duplex of as high as 2000 Mbps.', 4, 'images/dgs1100.jpg', 13),
+(33, 'Switch HUB 8 Port Gigabit 1420-8G JH329A', 671000.00, 'Switch Unmanaged, plug-n-play\r\n8 Port Gigabit Ethernet Support CAT5e', 4, 'images/hpJH3A.jpg', 18);
 
 -- --------------------------------------------------------
 
@@ -207,10 +212,21 @@ CREATE TABLE `transaction` (
 --
 
 INSERT INTO `transaction` (`transaction_id`, `transaction_date`, `customer_id`, `admin_id`) VALUES
+(9, '2024-05-15 11:09:00', 8, NULL),
+(10, '2024-04-21 12:00:00', 12, NULL),
+(11, '2024-03-12 10:00:00', 9, NULL),
+(12, '2024-02-10 13:00:00', 5, NULL),
+(13, '2024-01-18 08:00:00', 7, NULL),
+(14, '2024-04-30 10:12:25', 14, NULL),
+(15, '2024-05-20 07:15:00', 11, NULL),
+(16, '2024-03-01 06:21:00', 4, NULL),
+(17, '2024-02-25 09:00:00', 13, NULL),
+(18, '2024-01-05 05:12:00', 8, NULL),
 (29, '2024-12-16 08:22:54', 7, 1),
 (30, '2024-11-20 08:25:09', 7, NULL),
 (31, '2024-08-21 08:25:09', 7, NULL),
-(32, '2024-12-16 19:04:49', 7, NULL);
+(32, '2024-12-16 19:04:49', 7, NULL),
+(33, '2024-12-17 18:40:53', 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -220,13 +236,13 @@ INSERT INTO `transaction` (`transaction_id`, `transaction_date`, `customer_id`, 
 
 CREATE TABLE `transaction_detail` (
   `transaction_detail_id` int(11) NOT NULL,
-  `transaction_id` int(11) DEFAULT NULL,
-  `product_id` int(11) DEFAULT NULL,
-  `quantity` int(11) DEFAULT NULL,
-  `total_price` decimal(10,2) DEFAULT NULL,
-  `status` enum('cancelled','pending','completed') DEFAULT 'pending',
-  `payment_proof` varchar(255) DEFAULT NULL,
-  `transaction_description` varchar(255) NOT NULL
+  `transaction_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `total_price` decimal(10,2) NOT NULL,
+  `status` enum('cancelled','pending','completed') NOT NULL DEFAULT 'pending',
+  `payment_proof` varchar(255) NOT NULL,
+  `transaction_description` varchar(255) DEFAULT 'sedang diproses'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -234,11 +250,22 @@ CREATE TABLE `transaction_detail` (
 --
 
 INSERT INTO `transaction_detail` (`transaction_detail_id`, `transaction_id`, `product_id`, `quantity`, `total_price`, `status`, `payment_proof`, `transaction_description`) VALUES
+(10, 9, 1, 3, 23250000.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(11, 10, 30, 1, 500000.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(12, 11, 22, 2, 3000000.00, 'pending', 'uploads/proof.jpeg', ''),
+(13, 12, 28, 1, 1688865.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(14, 13, 31, 2, 3700000.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(15, 14, 33, 1, 6710000.00, 'pending', 'uploads/proof.jpeg', ''),
+(16, 15, 32, 1, 1614000.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(17, 16, 29, 2, 920000.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(18, 17, 22, 1, 1500000.00, 'completed', 'uploads/proof.jpeg', 'Pembayaran Berhasil'),
+(19, 18, 28, 3, 5066595.00, 'pending', 'uploads/proof.jpeg', ''),
 (29, 29, 22, 3, 4500000.00, 'completed', 'uploads/proof.jpeg', 'berhasil'),
 (30, 30, 1, 1, 775000.00, 'pending', 'uploads/proof.jpeg', ''),
 (31, 31, 28, 1, 1688865.00, 'pending', 'uploads/proof.jpeg', ''),
 (32, 32, 22, 1, 1500000.00, 'pending', 'uploads/proof.jpeg', ''),
-(33, 32, 1, 2, 1550000.00, 'pending', 'uploads/proof.jpeg', '');
+(33, 32, 1, 2, 1550000.00, 'pending', 'uploads/proof.jpeg', ''),
+(34, 33, 29, 2, 920000.00, 'pending', 'uploads/proof.jpeg', 'sedang diproses');
 
 --
 -- Indexes for dumped tables
@@ -323,19 +350,19 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT for table `cart`
 --
 ALTER TABLE `cart`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
-  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `cart_item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `customer`
@@ -353,19 +380,19 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `product_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `transaction`
 --
 ALTER TABLE `transaction`
-  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `transaction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `transaction_detail`
 --
 ALTER TABLE `transaction_detail`
-  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `transaction_detail_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- Constraints for dumped tables

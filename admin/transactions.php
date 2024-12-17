@@ -18,7 +18,13 @@ $startFrom = ($page - 1) * $transactionsPerPage;
 
 // Mendapatkan kata kunci pencarian jika ada
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+$sortOrder = isset($_GET['sort']) ? $_GET['sort'] : 'DESC'; // Default DESC
 
+// Validasi sort order (harus ASC atau DESC)
+$validSortOrders = ['ASC', 'DESC'];
+if (!in_array($sortOrder, $validSortOrders)) {
+    $sortOrder = 'DESC';
+}
 // Query untuk mengambil data transaksi
 if ($searchQuery != '') {
     $query = "SELECT t.transaction_id, t.transaction_date, 
@@ -33,6 +39,7 @@ if ($searchQuery != '') {
              OR c.last_name LIKE '%$searchQuery%'
              OR p.product_name LIKE '%$searchQuery%'
              OR t.transaction_date LIKE '%$searchQuery%'
+            ORDER BY t.transaction_date $sortOrder
           LIMIT $startFrom, $transactionsPerPage";
 
 } else {
@@ -44,6 +51,7 @@ if ($searchQuery != '') {
               JOIN transaction_detail td ON t.transaction_id = td.transaction_id
               JOIN customer c ON t.customer_id = c.customer_id
               JOIN product p ON td.product_id = p.product_id
+              ORDER BY t.transaction_date $sortOrder
               LIMIT $startFrom, $transactionsPerPage";
 }
 
@@ -106,8 +114,12 @@ $result = mysqli_query($conn, $query);
                         <?php endif; ?>
                     </ul>
                     <form class="d-flex ms-auto" method="GET" action="transactions.php">
-                        <input class="form-control me-2" type="search" placeholder="Search transactions" aria-label="Search" name="search" value="<?php echo $searchQuery; ?>">
-                        <button class="btn btn-outline-light" type="submit">Search</button>
+                        <input class="form-control me-2" type="search" placeholder="Search transaction" name="search" value="<?php echo $searchQuery; ?>">
+                        <button class="btn btn-outline-light me-2" type="submit">Search</button>
+                        <select class="form-select" name="sort" onchange="this.form.submit()">
+                            <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Newest</option>
+                            <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Oldest</option>
+                        </select>
                     </form>
                 </div>
             </div>

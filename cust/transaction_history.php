@@ -15,10 +15,16 @@ $transactionsPerPage = 8; // Jumlah transaksi yang ditampilkan per halaman
 $page = isset($_GET['page']) ? $_GET['page'] : 1; // Nomor halaman saat ini
 $startFrom = ($page - 1) * $transactionsPerPage; // Mulai dari transaksi ke-...
 
-// Mendapatkan kata kunci pencarian jika ada
+// Mendapatkan kata kunci pencarian dan sorting jika ada
 $searchQuery = isset($_GET['search']) ? $_GET['search'] : '';
+$sortOrder = isset($_GET['sort']) ? $_GET['sort'] : 'DESC'; // Default DESC
 
-// Query untuk mengambil transaksi
+// Validasi sort order (harus ASC atau DESC)
+$validSortOrders = ['ASC', 'DESC'];
+if (!in_array($sortOrder, $validSortOrders)) {
+    $sortOrder = 'DESC';
+}
+
 // Query untuk mengambil transaksi
 if ($searchQuery != '') {
     $queryTransactions = "SELECT t.transaction_id, t.transaction_date, 
@@ -29,7 +35,7 @@ if ($searchQuery != '') {
                            WHERE t.customer_id = '$customer_id'
                            AND (t.transaction_id LIKE '%$searchQuery%'
                                 OR p.product_name LIKE '%$searchQuery%')
-                           ORDER BY t.transaction_date DESC
+                           ORDER BY t.transaction_date $sortOrder
                            LIMIT $startFrom, $transactionsPerPage";
 } else {
     $queryTransactions = "SELECT t.transaction_id, t.transaction_date, 
@@ -38,7 +44,7 @@ if ($searchQuery != '') {
                            JOIN transaction_detail td ON t.transaction_id = td.transaction_id
                            JOIN product p ON td.product_id = p.product_id
                            WHERE t.customer_id = '$customer_id'
-                           ORDER BY t.transaction_date DESC
+                           ORDER BY t.transaction_date $sortOrder
                            LIMIT $startFrom, $transactionsPerPage";
 }
 $resultTransactions = mysqli_query($conn, $queryTransactions);
@@ -74,17 +80,17 @@ $totalPages = ceil($totalTransactions / $transactionsPerPage); // Total halaman
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .card-img-top {
-            height: 100px; /* Ukuran gambar lebih kecil */
-            object-fit: fill; /* Membuat gambar mengisi area card */
+            height: 100px;
+            object-fit: fill;
         }
         body {
-            padding-top: 70px; /* Sesuaikan dengan tinggi navbar */
+            padding-top: 70px;
         }
     </style>
 </head>
 <body>
 <header>
-        <nav class="navbar navbar-expand-lg navbar-dark  fixed-top">
+        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" href="index.php">
                     <img src="images/logo.png" alt="Logo"> Lintas Buana
@@ -98,20 +104,19 @@ $totalPages = ceil($totalTransactions / $transactionsPerPage); // Total halaman
                             <a class="nav-link" href="index.php">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link active" href="products.php">Products</a>
-                            <?php if(isset($_SESSION['username'])): ?>
+                            <a class="nav-link" href="products.php">Products</a>
+                        </li>
+                        <?php if(isset($_SESSION['username'])): ?>
                             <li class="nav-item">
                                 <a class="nav-link" href="cart.php">Cart</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="transaction_history.php">Transactions</a>
+                                <a class="nav-link active" href="transaction_history.php">Transactions</a>
                             </li>
-                            <!-- Jika user sudah login, tampilkan logout -->
                             <li class="nav-item">
                                 <a class="nav-link" href="logout.php">Logout</a>
                             </li>
                         <?php else: ?>
-                            <!-- Jika user belum login, tampilkan login dan register -->
                             <li class="nav-item">
                                 <a class="nav-link" href="loginform.php">Login</a>
                             </li>
@@ -120,11 +125,14 @@ $totalPages = ceil($totalTransactions / $transactionsPerPage); // Total halaman
                             </li>
                         <?php endif; ?>
                     </ul>
-
                     <!-- Search Form -->
                     <form class="d-flex ms-auto" method="GET" action="transaction_history.php">
-                        <input class="form-control me-2" type="search" placeholder="Search products" aria-label="Search" name="search" value="<?php echo $searchQuery; ?>">
-                        <button class="btn btn-outline-light" type="submit">Search</button>
+                        <input class="form-control me-2" type="search" placeholder="Search transaction" name="search" value="<?php echo $searchQuery; ?>">
+                        <button class="btn btn-outline-light me-2" type="submit">Search</button>
+                        <select class="form-select" name="sort" onchange="this.form.submit()">
+                            <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Newest</option>
+                            <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Oldest</option>
+                        </select>
                     </form>
                 </div>
             </div>
@@ -172,7 +180,7 @@ $totalPages = ceil($totalTransactions / $transactionsPerPage); // Total halaman
         <ul class="pagination justify-content-center">
             <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                 <li class="page-item <?php echo ($i == $page) ? 'active' : ''; ?>">
-                    <a class="page-link" href="transaction_history.php?page=<?php echo $i; ?>&search=<?php echo $searchQuery; ?>"><?php echo $i; ?></a>
+                    <a class="page-link" href="transaction_history.php?page=<?php echo $i; ?>&search=<?php echo $searchQuery; ?>&sort=<?php echo $sortOrder; ?>"><?php echo $i; ?></a>
                 </li>
             <?php endfor; ?>
         </ul>
